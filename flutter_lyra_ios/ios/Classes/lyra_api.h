@@ -51,10 +51,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithFormToken:(NSString *)formToken
     errorCodes:(ErrorCodesInterface *)errorCodes
-    timeoutInSeconds:(nullable NSNumber *)timeoutInSeconds;
+    timeoutInSeconds:(nullable NSNumber *)timeoutInSeconds
+    options:(NSDictionary<NSString *, NSString *> *)options;
 @property(nonatomic, copy) NSString * formToken;
 @property(nonatomic, strong) ErrorCodesInterface * errorCodes;
 @property(nonatomic, strong, nullable) NSNumber * timeoutInSeconds;
+@property(nonatomic, strong) NSDictionary<NSString *, NSString *> * options;
 @end
 
 /// The codec used by LyraHostApi.

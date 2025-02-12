@@ -139,11 +139,13 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 @implementation ProcessRequestInterface
 + (instancetype)makeWithFormToken:(NSString *)formToken
     errorCodes:(ErrorCodesInterface *)errorCodes
-    timeoutInSeconds:(nullable NSNumber *)timeoutInSeconds {
+    timeoutInSeconds:(nullable NSNumber *)timeoutInSeconds
+    options:(NSDictionary<NSString *, NSString *> *)options {
   ProcessRequestInterface* pigeonResult = [[ProcessRequestInterface alloc] init];
   pigeonResult.formToken = formToken;
   pigeonResult.errorCodes = errorCodes;
   pigeonResult.timeoutInSeconds = timeoutInSeconds;
+  pigeonResult.options = options;
   return pigeonResult;
 }
 + (ProcessRequestInterface *)fromList:(NSArray *)list {
@@ -153,6 +155,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.errorCodes = [ErrorCodesInterface nullableFromList:(GetNullableObjectAtIndex(list, 1))];
   NSAssert(pigeonResult.errorCodes != nil, @"");
   pigeonResult.timeoutInSeconds = GetNullableObjectAtIndex(list, 2);
+  pigeonResult.options = GetNullableObjectAtIndex(list, 3);
+  NSAssert(pigeonResult.options != nil, @"");
   return pigeonResult;
 }
 + (nullable ProcessRequestInterface *)nullableFromList:(NSArray *)list {
@@ -163,6 +167,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.formToken ?: [NSNull null]),
     (self.errorCodes ? [self.errorCodes toList] : [NSNull null]),
     (self.timeoutInSeconds ?: [NSNull null]),
+    (self.options ?: [NSNull null]),
   ];
 }
 @end

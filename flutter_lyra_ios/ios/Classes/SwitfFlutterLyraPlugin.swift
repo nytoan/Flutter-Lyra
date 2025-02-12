@@ -104,6 +104,12 @@ public class SwiftFlutterLyraPlugin: NSObject, FlutterPlugin, LyraHostApi {
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: cancelProcessWork!)
         }
         
+        let options = [
+            LyraPaymentOptions.customPopupLabel: request.options["CUSTOM_POPUP_LABEL"],
+            LyraPaymentOptions.customHeaderLabel: request.options["CUSTOM_HEADER_LABEL"],
+            LyraPaymentOptions.customPayButtonLabel: request.options["CUSTOM_PAY_BUTTON_LABEL"]
+        ]
+        
         do {
             try Lyra.process(
                 viewController!,
@@ -136,7 +142,8 @@ public class SwiftFlutterLyraPlugin: NSObject, FlutterPlugin, LyraHostApi {
                             )
                         )
                     }
-                }
+                },
+                options
             )
             
         } catch {

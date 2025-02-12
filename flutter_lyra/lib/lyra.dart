@@ -52,11 +52,13 @@ class Lyra {
   Future<String> process(
     String formToken, {
     Duration? timeout,
+    Map<String?, String?>? options,
   }) async {
     try {
       final lyraResponse = await _platform.process(
         formToken,
         timeout: timeout,
+        options: options,
       );
 
       return lyraResponse;

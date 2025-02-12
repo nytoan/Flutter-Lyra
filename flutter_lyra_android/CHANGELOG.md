@@ -1,3 +1,7 @@
+# 0.6.1
+
+- **FEAT** Add process option to be able to set CUSTOM_PAY_BUTTON_LABEL, CUSTOM_HEADER_LABEL and CUSTOM_POPUP_LABEL 
+
 # 0.6.0
 
 - **BREAKING CHANGE**: [Android] Update min and compile SDK versions to match Flutter's

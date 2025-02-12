@@ -52,11 +52,13 @@ class ProcessRequestInterface {
     required this.formToken,
     required this.errorCodes,
     this.timeoutInSeconds,
+    this.options = const {},
   });
 
   final String formToken;
   final ErrorCodesInterface errorCodes;
   final int? timeoutInSeconds;
+  final Map<String?, String?> options;
 }
 
 @HostApi()

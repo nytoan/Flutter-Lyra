@@ -13,8 +13,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
-class FlutterLyraPlugin : FlutterPlugin, ActivityAware, LyraApi.LyraHostApi
-{
+class FlutterLyraPlugin : FlutterPlugin, ActivityAware, LyraApi.LyraHostApi {
     private var context: Context? = null
     private var activity: Activity? = null
 
@@ -123,11 +122,17 @@ class FlutterLyraPlugin : FlutterPlugin, ActivityAware, LyraApi.LyraHostApi
         var cancelProcessJob: Job? = null
 
         if (timeout != null) {
-            cancelProcessJob =  GlobalScope.launch {
+            cancelProcessJob = GlobalScope.launch {
                 delay(TimeUnit.SECONDS.toMillis(timeout))
                 Lyra.cancelProcess()
             }
         }
+
+        val options = hashMapOf<String, Any?>(
+            Lyra.CUSTOM_PAY_BUTTON_LABEL to request.options["CUSTOM_PAY_BUTTON_LABEL"],
+            Lyra.CUSTOM_HEADER_LABEL to request.options["CUSTOM_HEADER_LABEL"],
+            Lyra.CUSTOM_POPUP_LABEL to request.options["CUSTOM_POPUP_LABEL"]
+        )
 
         try {
             Lyra.process(
@@ -139,14 +144,17 @@ class FlutterLyraPlugin : FlutterPlugin, ActivityAware, LyraApi.LyraHostApi
                         result.success(lyraResponse.toString())
                     }
 
-                    override fun onError(lyraException: LyraException, lyraResponse: LyraResponse?) {
+                    override fun onError(
+                        lyraException: LyraException,
+                        lyraResponse: LyraResponse?
+                    ) {
                         cancelProcessJob?.cancel()
                         // We do not complete with error if errorCode is "MOB_013".
                         // This error indicate that the payment process cannot be cancelled.
                         // After this error, normal SDK behavior continues:
                         // if the payment completes successfully then the onSuccess handler will be called.
                         // if the payment is failed. Depending on the error, the payment form remains displayed or the onError handler will be called.
-                        if(lyraException.errorCode != "MOB_013") {
+                        if (lyraException.errorCode != "MOB_013") {
                             result.error(
                                 Converters.parseError(
                                     lyraError = lyraException,
@@ -160,7 +168,8 @@ class FlutterLyraPlugin : FlutterPlugin, ActivityAware, LyraApi.LyraHostApi
                             )
                         }
                     }
-                }
+                },
+                options
             )
         } catch (error: Throwable) {
             cancelProcessJob?.cancel()
