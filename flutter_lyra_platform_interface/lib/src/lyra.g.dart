@@ -91,8 +91,7 @@ class LyraKeyInterface {
     result as List<Object?>;
     return LyraKeyInterface(
       publicKey: result[0]! as String,
-      options:
-          LyraInitializeOptionsInterface.decode(result[1]! as List<Object?>),
+      options: LyraInitializeOptionsInterface.decode(result[1]! as List<Object?>),
     );
   }
 }
@@ -102,6 +101,7 @@ class ProcessRequestInterface {
     required this.formToken,
     required this.errorCodes,
     this.timeoutInSeconds,
+    required this.options,
   });
 
   String formToken;
@@ -110,11 +110,14 @@ class ProcessRequestInterface {
 
   int? timeoutInSeconds;
 
+  Map<String?, String?> options;
+
   Object encode() {
     return <Object?>[
       formToken,
       errorCodes.encode(),
       timeoutInSeconds,
+      options,
     ];
   }
 
@@ -124,6 +127,7 @@ class ProcessRequestInterface {
       formToken: result[0]! as String,
       errorCodes: ErrorCodesInterface.decode(result[1]! as List<Object?>),
       timeoutInSeconds: result[2] as int?,
+      options: (result[3] as Map<Object?, Object?>?)!.cast<String?, String?>(),
     );
   }
 }
@@ -152,13 +156,13 @@ class _LyraHostApiCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 128:
+      case 128: 
         return ErrorCodesInterface.decode(readValue(buffer)!);
-      case 129:
+      case 129: 
         return LyraInitializeOptionsInterface.decode(readValue(buffer)!);
-      case 130:
+      case 130: 
         return LyraKeyInterface.decode(readValue(buffer)!);
-      case 131:
+      case 131: 
         return ProcessRequestInterface.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -207,7 +211,8 @@ class LyraHostApi {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LyraHostApi.getFormTokenVersion', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList =
+        await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

@@ -325,6 +325,19 @@ public class LyraApi {
       this.timeoutInSeconds = setterArg;
     }
 
+    private @NonNull Map<String, String> options;
+
+    public @NonNull Map<String, String> getOptions() {
+      return options;
+    }
+
+    public void setOptions(@NonNull Map<String, String> setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"options\" is null.");
+      }
+      this.options = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private ProcessRequestInterface() {}
 
@@ -351,21 +364,30 @@ public class LyraApi {
         return this;
       }
 
+      private @Nullable Map<String, String> options;
+
+      public @NonNull Builder setOptions(@NonNull Map<String, String> setterArg) {
+        this.options = setterArg;
+        return this;
+      }
+
       public @NonNull ProcessRequestInterface build() {
         ProcessRequestInterface pigeonReturn = new ProcessRequestInterface();
         pigeonReturn.setFormToken(formToken);
         pigeonReturn.setErrorCodes(errorCodes);
         pigeonReturn.setTimeoutInSeconds(timeoutInSeconds);
+        pigeonReturn.setOptions(options);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(3);
+      ArrayList<Object> toListResult = new ArrayList<Object>(4);
       toListResult.add(formToken);
       toListResult.add((errorCodes == null) ? null : errorCodes.toList());
       toListResult.add(timeoutInSeconds);
+      toListResult.add(options);
       return toListResult;
     }
 
@@ -377,6 +399,8 @@ public class LyraApi {
       pigeonResult.setErrorCodes((errorCodes == null) ? null : ErrorCodesInterface.fromList((ArrayList<Object>) errorCodes));
       Object timeoutInSeconds = list.get(2);
       pigeonResult.setTimeoutInSeconds((timeoutInSeconds == null) ? null : ((timeoutInSeconds instanceof Integer) ? (Integer) timeoutInSeconds : (Long) timeoutInSeconds));
+      Object options = list.get(3);
+      pigeonResult.setOptions((Map<String, String>) options);
       return pigeonResult;
     }
   }

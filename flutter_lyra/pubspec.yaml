@@ -1,5 +1,6 @@
 name: flutter_lyra
 description: This package allows you to use the methods from the lyra android and ios native sdks in Flutter
+publish_to: none
 
 version: 0.6.0
 
