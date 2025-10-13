@@ -1,6 +1,5 @@
 name: flutter_lyra
 description: This package allows you to use the methods from the lyra android and ios native sdks in Flutter
-publish_to: none
 
 version: 0.6.0
 
@@ -8,7 +7,8 @@ homepage: https://github.com/bamlab/Flutter-Lyra
 repository: https://github.com/bamlab/Flutter-Lyra
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=3.0.0"
 
 flutter:
   plugin:
