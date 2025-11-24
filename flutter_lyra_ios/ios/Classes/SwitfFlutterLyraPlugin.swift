@@ -74,9 +74,27 @@ public class SwiftFlutterLyraPlugin: NSObject, FlutterPlugin, LyraHostApi {
                 )
             )
         }
-        
-        let viewController = ((UIApplication.shared.delegate?.window!)!).rootViewController
-        
+
+        // CORRECTION MAJEURE pour la gestion d'UIScene (iOS 13+).
+        // L'accès direct à `UIApplication.shared.delegate?.window` est obsolète
+        // et cause un crash lorsque l'application utilise SceneDelegate.
+        // Nous recherchons la fenêtre clé (Key Window) dans les scènes actives.
+        guard let windowScene = UIApplication.shared.connectedScenes
+                .filter({ $0.activationState == .foregroundActive })
+                .first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+              let viewController = window.rootViewController else {
+            
+            completion(
+                nil,
+                FlutterError(
+                    code: "view_controller_error_code",
+                    message: "Could not find active root view controller in connected scenes.",
+                    details: nil
+                )
+            )
+            return
+        }
 
         // If the request has a timeout argument, launch a timer that will cancel the process after the given time.
         var cancelProcessWork: DispatchWorkItem? = nil
