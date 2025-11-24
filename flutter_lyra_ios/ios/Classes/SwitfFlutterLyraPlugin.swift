@@ -130,7 +130,7 @@ public class SwiftFlutterLyraPlugin: NSObject, FlutterPlugin, LyraHostApi {
         
         do {
             try Lyra.process(
-                viewController!,
+                viewController,
                 request.formToken,
                 onSuccess: { ( _ lyraResponse: LyraResponse) -> Void in
                     cancelProcessWork?.cancel()
